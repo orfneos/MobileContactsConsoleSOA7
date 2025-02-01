@@ -10,7 +10,8 @@ public class MobileContact extends AbstractEntity{
     public MobileContact() {
     }
 
-    public MobileContact(String firstname, String phoneNumber, String lastname) {
+    public MobileContact(Long id, String firstname, String phoneNumber, String lastname) {
+        setId(id);
         this.firstname = firstname;
         this.phoneNumber = phoneNumber;
         this.lastname = lastname;
