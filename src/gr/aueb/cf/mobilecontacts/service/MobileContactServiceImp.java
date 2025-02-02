@@ -5,6 +5,7 @@ import gr.aueb.cf.mobilecontacts.dto.MobileContactInsertDTO;
 import gr.aueb.cf.mobilecontacts.dto.MobileContactUpdateDTO;
 import gr.aueb.cf.mobilecontacts.exceptions.ContactNotFoundException;
 import gr.aueb.cf.mobilecontacts.exceptions.PhoneNumberAlreadyExistsException;
+import gr.aueb.cf.mobilecontacts.mapper.Mapper;
 import gr.aueb.cf.mobilecontacts.model.MobileContact;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class MobileContactServiceImp implements IMobileContactService{
             if (dao.phoneNumberExist(dto.getPhoneNumber())) {
                 throw new PhoneNumberAlreadyExistsException("Contact with phone number " + dto.getPhoneNumber() + " already exist.");
             }
-            mobileContact = mapInsertDTOToContact(dto);
+            mobileContact = Mapper.mapInsertDTOToContact(dto);
 
             System.err.printf("MobileContactServiceImp Logger: %s was insert\n", mobileContact);
             return dao.insert(mobileContact);
@@ -54,7 +55,7 @@ public class MobileContactServiceImp implements IMobileContactService{
                 throw new PhoneNumberAlreadyExistsException("Contact with phone number: " + dto.getPhoneNumber() + " already exists and can not be updated");
             }
 
-            newContact = mapUpdateDTOToContact(dto);
+            newContact = Mapper.mapUpdateDTOToContact(dto);
             System.err.printf("MobileContactServiceImp Logger: %s was updated with new info: %s\n ", mobileContact, newContact);
             return dao.update(dto.getId(), newContact);
         } catch (ContactNotFoundException | PhoneNumberAlreadyExistsException e) {
@@ -131,11 +132,4 @@ public class MobileContactServiceImp implements IMobileContactService{
         }
     }
 
-    private MobileContact mapInsertDTOToContact(MobileContactInsertDTO dto) {
-        return new MobileContact(null, dto.getFirstname(), dto.getLastname(), dto.getPhoneNumber());
-    }
-
-    private MobileContact mapUpdateDTOToContact(MobileContactUpdateDTO dto) {
-        return new MobileContact(dto.getId(), dto.getFirstname(), dto.getLastname(), dto.getPhoneNumber());
-    }
 }
